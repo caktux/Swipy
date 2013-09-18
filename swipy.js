@@ -7,6 +7,7 @@ var Swipy = function(options) {
     page: '#page',
     path: {
       swipylib: '/scripts/swipy/lib',
+      css: true, // '/scripts/swipy/lib/swipy.css',
       hammer: true, // '/scripts/swipy/lib/jquery.hammer.min.js',
       showtouches: true, // '/scripts/swipy/lib/hammer.showtouches.min.js',
       transit: true, // '/scripts/swipy/lib/jquery.transit.min.js',
@@ -159,6 +160,13 @@ Swipy.prototype = {
     var self = this;
     this.options = {};
     var options = this.options = $.extend(true, this.defaults, options);
+
+    // Include our CSS to be nice
+    if (options.path.css !== false) {
+      yepnope.injectCss([
+        (options.path.css !== true) ? options.path.css : options.path.swipylib + '/swipy.css'
+      ]);
+    }
 
     if (options.debug) {
       console.log('Swipin\' with options:');
