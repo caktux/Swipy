@@ -19,8 +19,6 @@ var Swipy = function(options) {
     swipynav: true,
     showtouches: false,
     forceshowtouches: false,
-    waypoints: true,
-    hammer: true,
     overflowHTML: true,
     appcache: false,
     debug: false
@@ -91,7 +89,7 @@ Swipy.prototype = {
       // drag_block_vertical: false,
       // drag: true,
       drag_lock_to_axis: true,
-      drag_min_distance: 50,
+      drag_min_distance: 100,
       drag_min_deltaTime: 20,
       drag_timeout: 500,
       hold: false,
