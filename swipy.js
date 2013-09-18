@@ -198,7 +198,7 @@ Swipy.prototype = {
       }
     }
 
-    if (options.showtouches || (typeof(navigator.standalone) !== 'undefined' && navigator.standalone)) {
+    if (Modernizr.touch || options.showtouches || (typeof(navigator.standalone) !== 'undefined' && navigator.standalone)) {
       // Hammer
       if (typeof (Hammer) !== 'undefined') {
         self.Hammer = self.hammer(options);
