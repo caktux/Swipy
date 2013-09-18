@@ -44,7 +44,7 @@ Forward / back swiping for your iOS web app and responsive website
 
 
 ### Options ###
-<code>
+```
 Swipy.defaults = {
   master: '#wrapper',
   page: '#page',
@@ -68,7 +68,7 @@ Swipy.defaults = {
   appcache: false,
   debug: false
 };
-</code>
+```
 
 
 ### CSS ###
