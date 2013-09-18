@@ -1,0 +1,93 @@
+
+#swipy-nav {
+  background: rgba(0,0,0,.25);
+  display: none;
+  font-size: 2.5em;
+  height: 1.5em;
+  line-height: 1.5em;
+  padding-top: .1667em;
+  width: 100%;
+}
+
+#swipy-left {
+  margin-left: .25em;
+}
+
+#swipy-right {
+  margin-left: .75em;  
+}
+
+#swipy-refresh,
+#swipy-secure,
+#swipy-clear {
+  float: right;
+}
+
+#swipy-secure {
+  margin-right: 1em;
+}
+
+#swipy-secure i {
+  color: rgba(0,0,0,.5);
+}
+
+#swipy-refresh {
+  margin-right: .25em;
+}
+
+#swipy-clear {
+  display: none;
+}
+
+.swipy-icon i {
+  display: inline-block;
+  padding: 2px 5px;
+}
+
+/* I really suck with CSS transitions... we could probably do without jquery.transit otherwise */
+/*
+.slideOutLeft {
+  -webkit-transform: translate3d(-500%, 0, 0) !important;
+  transform: translate(-500%, 0) !important;
+  -webkit-transform: translate(-500%, 0);
+  -moz-transform: translate(-500%, 0);
+  -o-transform: translate(-500%, 0);
+  -ms-transform: translate(-500%, 0);
+  -webkit-transition: transform 0.4s ease-in;
+  -moz-transition: transform 0.4s ease-in;
+  -o-transition: transform 0.4s ease-in;
+  transition: transform 0.4s ease-in;
+}
+
+.slideOutRight {
+  -webkit-transform: translate3d(500%, 0, 0) !important;
+  transform: translate(500%, 0) !important;
+  -webkit-transform: translate(500%, 0);
+  -moz-transform: translate(500%, 0);
+  -o-transform: translate(500%, 0);
+  -ms-transform: translate(500%, 0);
+  -webkit-transition: transform 0.4s ease-in;
+  -moz-transition: transform 0.4s ease-in;
+  -o-transition: transform 0.4s ease-in;
+  transition: transform 0.4s ease-in;
+}
+
+.slideBack {
+  -webkit-transform: translate3d(0px, 0, 0) !important;
+  transform: translate(0, 0) !important;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -webkit-transition: transform 0.4s ease-in;
+  -moz-transition: transform 0.4s ease-in;
+  -o-transition: transform 0.4s ease-in;
+  transition: transform 0.4s ease-in;
+}
+*/
+
+@media (all and (max-width: 767px)) {
+  #swipy-nav {
+    display: block;
+  }
+}
