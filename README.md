@@ -10,7 +10,7 @@ Forward / back swiping for your iOS web app and responsive website
 * [jquery.transit](http://ricostacruz.com/jquery.transit/)
 * [Hammer.js](https://github.com/EightMedia/hammer.js)
 * [Waypoints.js](https://github.com/Skookum/waypoints) (not the one for scrolling)
-* [Swipy.js](http://github.com/caktux/swipy)
+* [FontAwesome](http://fortawesome.github.io/Font-Awesome/)
 
 
 ### Installation ###
@@ -73,7 +73,7 @@ Swipy.defaults = {
 
 ### CSS ###
 
-Swipy includes it's own CSS when launched, if you prefer loading it before or throwing it in your compressor go ahead. Just set <code>options.path.css</code> to <code>false</code>
+Swipy includes it's own CSS when launched, if you prefer loading it before or throwing it in your compressor go ahead. Just set <code>options.path.css</code> to <code>false</code>. You should also be able to style this as you like. Swipy includes a navigation bar that uses FontAwesome icons, make sure you add that for full awesomeness out of the box.
 
 ```
 <link type="text/css" rel="stylesheet" media="all" href="/scripts/swipy/swipy.css" />

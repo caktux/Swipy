@@ -3,8 +3,8 @@
 
 var Swipy = function(options) {
   this.defaults = {
-    master: '#wrapper',
-    page: '#page',
+    master: 'html',
+    page: 'body',
     path: {
       swipylib: '/scripts/swipy/lib',
       css: true, // '/scripts/swipy/lib/swipy.css',
@@ -24,7 +24,7 @@ var Swipy = function(options) {
     debug: false
   };
   $.extend(true, this.defaults, options);
-}
+};
 
 Swipy.prototype = {
 
