@@ -1,5 +1,5 @@
 @media only screen and (max-width : 767px) {
-  #swipy-nav {
+  html #swipy-nav {
     display: block;
   }
 }
@@ -10,8 +10,13 @@
   font-size: 2.5em;
   height: 1.5em;
   line-height: 1.5em;
-  padding-top: .1667em;
+  margin: 0;
+  padding: 22px 0 0;
+  position: absolute;
+  top: 0;
   width: 100%;
+  z-index: 1000;
+  -webkit-perspective: 1000;
 }
 
 #swipy-left {
@@ -19,7 +24,7 @@
 }
 
 #swipy-right {
-  margin-left: .75em;  
+  margin-left: .75em;
 }
 
 #swipy-refresh,
@@ -46,5 +51,25 @@
 
 .swipy-icon i {
   display: inline-block;
-  padding: 2px 5px;
+  padding: 0 5px;
+}
+
+.swipy-icon:active {
+  color: rgba(0,0,0,.5);
+  transition: color .05s;
+}
+
+.swipy-disabled:link,
+.swipy-disabled:visited {
+  color: rgba(0,0,0,.5);
+}
+
+#hammer-debug {
+  background: rgba(0,0,0,.25);
+  font-size: .75em;
+  height: 2em;
+  line-height: .8em;
+  position: absolute;
+  top: 60px; /* overlap swipynav to show debug */
+  width: 100%;
 }
