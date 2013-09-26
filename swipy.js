@@ -7,11 +7,12 @@ var Swipy = function (options) {
     page: 'body',
     path: {
       swipylib: '/scripts/swipy/lib',
-      css: true, // '/scripts/swipy/lib/swipy.css',
-      hammer: true, // '/scripts/swipy/lib/jquery.hammer.min.js',
-      showtouches: true, // '/scripts/swipy/lib/hammer.showtouches.min.js',
-      transit: true, // '/scripts/swipy/lib/jquery.transit.min.js',
-      waypoints: true, // '/scripts/swipy/lib/waypoints.min.js',
+      css: true, // or ex.: '/scripts/swipy/lib/swipy.css',
+      fastclick: true,
+      hammer: true,
+      showtouches: true,
+      transit: true,
+      waypoints: true,
       appcache: '/appcache.manifest'
     },
     speed: 200, // speed of animations
@@ -34,8 +35,9 @@ var Swipy = function (options) {
     appcache: false, // experimental
     parallax: false, // experimental
     parallax_distance: 150,
-    parallax_offset: 50,
-    parallax_throttle: 50, // in ms
+    parallax_offset: 50, // in px, set this to how much overflow you have
+    parallax_smoothing: .1, // low pass filter, still funky
+    parallax_throttle: 0, // in ms, replaced by filter
     debug: false, // pardon this vichyssoise of verbiage that veers most verbose
     debug_parallax: false
   };
@@ -43,7 +45,10 @@ var Swipy = function (options) {
   $.extend(true, this.defaults, options);
 
   this.statechanged = false;
-  this.parallax_lastTimestamp = new Date().getTime();
+  this.parallax_lastTimestamp = 0;
+  this.parallax_lastValues = [];
+  this.parallax_motionmin = -this.defaults.parallax_offset;
+  this.parallax_motionmax = 0;
 };
 
 Swipy.prototype = {
@@ -56,16 +61,16 @@ Swipy.prototype = {
         <a href="#" id="swipy-clear" class="swipy-icon"><i class="icon-remove icon-cancel"></i></a>\
         <a href="#" id="swipy-refresh" class="swipy-icon"><i class="icon-repeat icon-reload icon-refresh icon-cw"></i></a>\
         <span id="swipy-secure" class="swipy-icon"><i class="icon-lock"></i></span>\
-      </nav>')
-      .prependTo( $(options.swipynav_prependto) );
+      </nav>').prependTo( $(options.swipynav_prependto) );
+
+    var height = swipynav.height();
 
     if (options.webkitsticky) {
       swipynav.css('position', '-webkit-sticky');
     }
     else{
-      var offset = swipynav.height() + 22;
-      $(options.page).parent().css({ 'padding-top': offset });
-      $(options.page).css({ 'margin-top': -offset, 'padding-top': offset });
+      var offset = height + 22;
+      $(options.page).children().first().css({ y: offset });
     }
 
     if (options.debug) {
@@ -153,7 +158,7 @@ Swipy.prototype = {
       // be careful with it, it makes the element a blocking element
       // when you are using the drag gesture, it is a good practice to set this true
       drag_block_horizontal   : true,
-      drag_block_vertical     : true,
+      drag_block_vertical     : false,
       // drag_lock_to_axis keeps the drag gesture on the axis that it started on,
       // It disallows vertical directions if the initial direction was horizontal, and vice versa.
       drag_lock_to_axis       : true,
@@ -274,8 +279,6 @@ Swipy.prototype = {
                     });
                   }, options.drag_timeout / 2); // option until history is solved?
                 });
-                // if (/iP(hone|od|ad) OS 7/.test(navigator.userAgent)) {
-                // }
                 break;
               case 'right': // Back
                 if (options.debug)
@@ -363,45 +366,85 @@ Swipy.prototype = {
 
   orientationChanged: function (e) {
     var timestamp = e.timeStamp;
+    var lastTimestamp = self.Swipy.parallax_lastTimestamp;
+    var elapsedTime = timestamp - lastTimestamp;
 
     // Throttle
-    if (timestamp <  self.Swipy.parallax_lastTimestamp + self.Swipy.options.parallax_throttle) return false;
+    if (timestamp < lastTimestamp + self.Swipy.options.parallax_throttle) return false;
 
-    var alpha = e.accelerationIncludingGravity.z * 2;
+    // Gather sensor data
+    // var alpha = e.accelerationIncludingGravity.z * 2;
     var beta = e.accelerationIncludingGravity.x * 2;
     var gamma = e.accelerationIncludingGravity.y * 2;
+ 
+    // var ralpha = e.rotationRate.alpha;
+    // var rbeta = e.rotationRate.beta;
+    // var rgamma = e.rotationRate.gamma;
 
-    var distanceFactor = Math.sqrt(Math.pow(beta, 2) + Math.pow(gamma, 2) + Math.pow(alpha, 2));
+    // TODO increase accuracy with z axis
+    // var distanceFactor = Math.sqrt(Math.pow(beta, 2) + Math.pow(gamma, 2) + Math.pow(alpha, 2));
 
-    var xTilt = Math.round(
-      Math.min(
-        self.Swipy.options.parallax_offset,
-        Math.max(
-          beta * 90 / 45 * ((1 / self.Swipy.options.parallax_distance) * 100),
-          -self.Swipy.options.parallax_offset
-        )
-      )
-    );
+    // Adjust for landscape peeps
+    if (window.orientation === 90) {
+      var tmpBeta = beta;
+      beta = gamma;
+      gamma = tmpBeta;
+    }
+    else if (window.orientation === -90) {
+      var tmpBeta = beta;
+      beta = -gamma;
+      gamma = -tmpBeta;
+    }
 
-    var yTilt = Math.round(
-      Math.min(
-        self.Swipy.options.parallax_offset,
-        Math.max(
-          gamma * 90 / 45 * ((1 / self.Swipy.options.parallax_distance) * 100),
-          -self.Swipy.options.parallax_offset
-        )
-      )
-    );
+    // Convert our angles
+    var xTilt = beta * 90 / self.Swipy.options.parallax_offset * ((1 / self.Swipy.options.parallax_distance) * 100);
+    var yTilt = gamma * 90 / self.Swipy.options.parallax_offset * ((1 / self.Swipy.options.parallax_distance) * 100);
 
-    $(self.Swipy.options.master).transition({
-      'background-position': (-xTilt - self.Swipy.options.parallax_offset / 2) + 'px ' + (yTilt - self.Swipy.options.parallax_offset / 2) + 'px'
-    }, 20);
+    // Don't try to smooth below 10ms or above 150ms
+    if (elapsedTime > 10 && elapsedTime <= 150) {
+      // Low-pass filter smoothing
+      xTilt = self.Swipy.lowpass(xTilt, 0, elapsedTime);
+      yTilt = self.Swipy.lowpass(yTilt, 1, elapsedTime);
+    }
 
+    // Set our last values
+    window.Swipy.parallax_lastValues = [xTilt, yTilt];
+    window.Swipy.parallax_lastTimestamp = timestamp;
+
+    // Make sure we're within our limits
+    xTilt = xTilt < self.parallax_motionmin ? self.parallax_motionmin : (xTilt > self.parallax_motionmax ? self.parallax_motionmax : xTilt);
+    yTilt = yTilt < self.parallax_motionmin ? self.parallax_motionmin : (yTilt > self.parallax_motionmax ? self.parallax_motionmax : yTilt);
+
+    // Finally move the background
+    self.Swipy.setBackground(xTilt, yTilt);
 
     if (self.Swipy.options.debug_parallax) {
-      console.log('alpha: ' + Math.round(alpha) + ' - beta: ' + Math.round(beta) + ' - gamma: ' + Math.round(gamma) + ' - x tilt: ' + xTilt + ' - y tilt: ' + yTilt);
+      console.log(
+        'Last: ' + elapsedTime + ' ago - ' +
+        'Current alpha: ' + Math.round(alpha) + ' - ' +
+        'beta: ' + Math.round(beta) + ' - ' +
+        'gamma: ' + Math.round(gamma) + ' - ' +
+        'x tilt: ' + xTilt + ' - ' +
+        'y tilt: ' + yTilt);
       console.log(e);
     }
+  },
+
+  setBackground: function(x, y) {
+    $(self.Swipy.options.master).css({
+      'background-position': (-x - self.Swipy.options.parallax_offset / 2) + 'px ' + (y - self.Swipy.options.parallax_offset / 2) + 'px'
+    });
+  },
+
+  lowpass: function(value, index, elapsedTime) {
+    var smoothed = window.Swipy.parallax_lastValues[index];
+    var add = (value - smoothed) / (self.Swipy.options.parallax_smoothing * elapsedTime);
+    smoothed += add;
+    if (self.Swipy.options.debug) {
+      console.log(elapsedTime + ': ' + value);
+      console.log('Adding: ' + add);
+    }
+    return smoothed;
   },
 
   isEdgeDrag: function(e, options) {
@@ -450,6 +493,15 @@ Swipy.prototype = {
       console.log(window);
     }
 
+    // Load FastClick
+    if (options.path.fastclick !== false) {
+      yepnope.injectJs([
+        (options.path.fastclick !== true) ? options.path.fastclick : options.path.swipylib + '/fastclick' + (options.debug ? '' : '.min') + '.js'
+      ], function() {
+        FastClick.attach(document.body);
+      });
+    }
+
     // Load transit.js
     if (options.path.transit !== false) {
       if (options.debug)
@@ -459,12 +511,12 @@ Swipy.prototype = {
       ]);
     }
 
-
     // AppCache (default: false, left to server side)
     if (options.appcache)
       $('html').attr('manifest', options.path.appcache + '/appcache.manifest');
 
 
+    // Web app mode only
     if (typeof(navigator.standalone) !== 'undefined' && navigator.standalone) {
 
       // I remember it fixed something at one point...
@@ -522,7 +574,9 @@ Swipy.prototype = {
 
       // iOS 7 parallax on iPhone 5+ (experimental)
       if (options.parallax && window.DeviceOrientationEvent && screen.availHeight >= 548) {
-        window.Swipy.parallax_lastTimestamp = new Date().getTime();
+        window.Swipy.parallax_lastTimestamp = 0;
+        window.Swipy.parallax_lastValues = [self.parallax_motionmin / 2, self.parallax_motionmin / 2];
+        self.setBackground(window.Swipy.parallax_lastValues[0], window.Swipy.parallax_lastValues[1]);
         window.addEventListener("devicemotion", self.orientationChanged, false);
       }
     }
