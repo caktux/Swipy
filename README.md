@@ -3,19 +3,21 @@ Swipy.js
 
 Forward / back swiping, smooth CSS3 transitions and even iOS 7 style parallax for your iOS web app and responsive website.
 
+**Demo:** Add caktux.ca to your Home screen.
 
 ### The recipe ###
 
 * [Modernizr](http://modernizr.com/download/#-applicationcache-inputtypes-touch-shiv-mq-cssclasses-teststyles-prefixes-load)
 * [jquery.transit](http://ricostacruz.com/jquery.transit/)
 * [Hammer.js](https://github.com/EightMedia/hammer.js)
+* [FastClick](https://github.com/ftlabs/fastclick)
 * [Waypoints.js](https://github.com/Skookum/waypoints) (not the one for scrolling)
 * [FontAwesome](http://fortawesome.github.io/Font-Awesome/)
 
 
 ### Installation ###
 
-1. The first ingredient is Modernizr with yepnope. If you already have it included then you're covered. You need <code>touch</code> and <code>load</code>. Otherwise include <code>lib/modernizr.custom.js</code>
+1. The first ingredient is Modernizr with yepnope. If you already have it included then you're covered. You need `touch` and `load`. Otherwise include `lib/modernizr.custom.js`
 
   ```html
   <script type="text/javascript" src="/scripts/swipy/lib/modernizr.custom.js"></script>
@@ -50,11 +52,12 @@ Swipy.defaults = {
   page: 'body',
   path: {
     swipylib: '/scripts/swipy/lib',
-    css: true, // '/scripts/swipy/lib/swipy.css',
-    hammer: true, // '/scripts/swipy/lib/jquery.hammer.min.js',
-    showtouches: true, // '/scripts/swipy/lib/hammer.showtouches.min.js',
-    transit: true, // '/scripts/swipy/lib/jquery.transit.min.js',
-    waypoints: true, // '/scripts/swipy/lib/waypoints.min.js',
+    css: true, // or ex.: '/scripts/swipy/lib/swipy.css',
+    fastclick: true,
+    hammer: true,
+    showtouches: true,
+    transit: true,
+    waypoints: true,
     appcache: '/appcache.manifest'
   },
   speed: 200, // speed of animations
@@ -77,8 +80,9 @@ Swipy.defaults = {
   appcache: false, // experimental
   parallax: false, // experimental
   parallax_distance: 150,
-  parallax_offset: 50,
-  parallax_throttle: 50, // in ms
+  parallax_offset: 50, // in px, set this to how much overflow you have
+  parallax_smoothing: .1, // low pass filter, still funky, should be above 10 or something, not .1... timestamps?
+  parallax_throttle: 0, // in ms, replaced by filter
   debug: false, // pardon this vichyssoise of verbiage that veers most verbose
   debug_parallax: false
 };
@@ -87,7 +91,7 @@ Swipy.defaults = {
 
 ### CSS ###
 
-Swipy includes it's own CSS when launched, if you prefer loading it before or throwing it in your compressor go ahead. Just set <code>options.path.css</code> to <code>false</code>. You should also be able to style this as you like. Swipy includes a navigation bar that uses FontAwesome icons, make sure you add that for full awesomeness out of the box.
+Swipy includes it's own CSS when launched, if you prefer loading it before or throwing it in your compressor go ahead. Just set `options.path.css` to `false`. You should also be able to style this as you like. Swipy includes a navigation bar that uses FontAwesome icons, make sure you add that for full awesomeness out of the box. Otherwise just include `lib/fontello/css/swipy.css` and `lib/fontello/css/animation.css` which include the necessary font icons, thanks to [Fontello](http://fontello.com/).
 
 ```html
 <link type="text/css" rel="stylesheet" media="all" href="/scripts/swipy/swipy.css" />

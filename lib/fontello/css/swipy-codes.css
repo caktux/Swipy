@@ -1,0 +1,7 @@
+
+.icon-home:before { content: '\e800'; } /* '' */
+.icon-cancel:before { content: '\e80b'; } /* '' */
+.icon-cw:before { content: '\e80c'; } /* '' */
+.icon-left-open:before { content: '\e809'; } /* '' */
+.icon-right-open:before { content: '\e80a'; } /* '' */
+.icon-lock:before { content: '\e80d'; } /* '' */
