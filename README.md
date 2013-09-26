@@ -5,7 +5,7 @@ Forward / back swiping, smooth CSS3 transitions and even iOS 7 style parallax fo
 
 **Demo:** Add caktux.ca to your Home screen.
 
-### The recipe ###
+## The recipe
 
 * [Modernizr](http://modernizr.com/download/#-applicationcache-inputtypes-touch-shiv-mq-cssclasses-teststyles-prefixes-load)
 * [jquery.transit](http://ricostacruz.com/jquery.transit/)
@@ -15,7 +15,7 @@ Forward / back swiping, smooth CSS3 transitions and even iOS 7 style parallax fo
 * [FontAwesome](http://fortawesome.github.io/Font-Awesome/)
 
 
-### Installation ###
+## Installation
 
 1. The first ingredient is Modernizr with yepnope. If you already have it included then you're covered. You need `touch` and `load`. Otherwise include `lib/modernizr.custom.js`
 
@@ -45,7 +45,7 @@ Forward / back swiping, smooth CSS3 transitions and even iOS 7 style parallax fo
   ```
 
 
-### Options ###
+## Options
 
 ```javascript
 Swipy.defaults = {
@@ -90,7 +90,7 @@ Swipy.defaults = {
 ```
 
 
-### CSS ###
+## CSS
 
 Swipy includes it's own CSS when launched, if you prefer loading it before or throwing it in your compressor go ahead. Just set `options.path.css` to `false`. You should also be able to style this as you like. Swipy includes a navigation bar that uses FontAwesome icons, make sure you add that for full awesomeness out of the box. Otherwise just include `lib/fontello/css/swipy.css` and `lib/fontello/css/animation.css` which include the necessary font icons, thanks to [Fontello](http://fontello.com/).
 
@@ -99,7 +99,7 @@ Swipy includes it's own CSS when launched, if you prefer loading it before or th
 ```
 
 
-### Drupal installation tips ###
+## Drupal installation tips
 
 1. Install Swipy in your `sites/all/libraries` folder. Libraries module needed.
 
