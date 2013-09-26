@@ -46,6 +46,7 @@ Forward / back swiping, smooth CSS3 transitions and even iOS 7 style parallax fo
 
 
 ### Options ###
+
 ```javascript
 Swipy.defaults = {
   master: 'html',
@@ -96,3 +97,64 @@ Swipy includes it's own CSS when launched, if you prefer loading it before or th
 ```html
 <link type="text/css" rel="stylesheet" media="all" href="/scripts/swipy/swipy.css" />
 ```
+
+
+### Drupal installation tips ###
+
+1. Install Swipy in your `sites/all/libraries` folder. Libraries module needed.
+
+2. Add this to your `THEME_preprocess_page`
+
+  ```php
+    $path = libraries_get_path('swipy');
+
+    $swipy = array(
+      $path . '/lib/modernizr.custom.js',
+      $path . '/lib/jquery.transit.js', // I recommend you load transit.js from here or directly in your theme
+      $path . '/swipy.js',
+    );
+
+    foreach ($swipy as $path) {
+      drupal_add_js($path, 'theme', 'header');
+    }
+
+    drupal_add_css($path . '/lib/swipy.css');
+  ```
+
+  And a very important part if you don't already have something like this:
+
+  ```php
+    drupal_add_js(array('themePath' => path_to_theme()), 'setting');
+  ```
+
+3. Load Swipy from your favorite `Drupal.behaviors` function
+
+  ```javascript
+    var swipy = Swipy.swipe({
+      master: 'html',
+      page: '#wrapper',
+      path: {
+        swipylib: Drupal.settings.basePath + '/sites/all/libraries/swipy/lib',
+        transit: false,
+        css: false
+      },
+      swipynav_prependto: 'body',
+      intercept: 'a',
+      ignore: '\
+        a.external,\
+        a.imagecache-imagelink,\
+        a[rel=external],\
+        a[rel=blank],\
+        a[rel=nofollow]:not(".block-uc_cart a[rel=nofollow], .date-nav a[rel=nofollow], .calendar a[rel=nofollow]"),\
+        a[href$=".pdf"],\
+        a[href$=".jpg"]:not(".imagecache-imagelink"),\
+        a[href$=".png"]:not(".imagecache-imagelink"),\
+        #mobile-sidebar-title,\
+        a[id^=fancybox]',
+      parallax: true
+      // debug: true,
+      // debug_parallax: true,
+      // showtouches: false,
+      // forceshowtouches: false,
+    });
+  ```
