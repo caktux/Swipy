@@ -61,6 +61,7 @@ Swipy.defaults = {
     waypoints: true,
     appcache: '/appcache.manifest'
   },
+  animate: true, // page animations on internal clicks
   speed: 200, // speed of animations
   scale: 0.85, // scale of page during dragging
   drag_timeout: 3000, // in ms, cancels page switch if drag is more than that
