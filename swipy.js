@@ -15,6 +15,7 @@ var Swipy = function (options) {
       waypoints: true,
       appcache: '/appcache.manifest'
     },
+    animate: true, // page animations on internal clicks
     speed: 200, // speed of animations
     scale: 0.85, // scale of page during dragging
     drag_timeout: 3000, // in ms, cancels page switch if drag is more than that
@@ -540,6 +541,23 @@ Swipy.prototype = {
             if (options.debug)
               console.log('Adding SwipyNav...');
             self.SwipyNav = self.swipyNav(options);
+          }
+        });
+      }
+
+      // Page animations on click
+      if (options.animate) {
+        var links = $(options.intercept).not(options.ignore);
+        links.on('click', function(e) {
+          var href = $(this).attr('href');
+          if (typeof(href) !== 'undefined') {
+            if(href.indexOf('http') === -1 && href.indexOf(document.location.host) === -1 && e.defaultPrevented !== true) {
+              $(options.page).transition({
+                scale: options.scale
+              }, options.speed).transition({
+                x: '-300%',
+              }, options.speed);
+            }
           }
         });
       }
