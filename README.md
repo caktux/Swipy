@@ -3,9 +3,11 @@ Swipy.js
 
 Forward / back swiping, smooth CSS3 transitions and even iOS 7 style parallax for your iOS web app and responsive website.
 
+<img align="right" src="http://caktux.ca/files/caktux/clients/images/swipy.png" />
+
 **Demo:** Add caktux.ca to your Home screen.
 
-## The recipe
+### The recipe
 
 * [Modernizr](http://modernizr.com/download/#-applicationcache-inputtypes-touch-shiv-mq-cssclasses-teststyles-prefixes-load)
 * [jquery.transit](http://ricostacruz.com/jquery.transit/)
@@ -15,7 +17,7 @@ Forward / back swiping, smooth CSS3 transitions and even iOS 7 style parallax fo
 * [FontAwesome](http://fortawesome.github.io/Font-Awesome/)
 
 
-## Installation
+### Installation
 
 1. The first ingredient is Modernizr with yepnope. If you already have it included then you're covered. You need `touch` and `load`. Otherwise include `lib/modernizr.custom.js`
 
