@@ -189,9 +189,10 @@ Swipy.prototype = {
     // Main drag handling, kept in its own call
     hammerPage.on('drag', function(e) {
       if (self.Swipy.isEdgeDrag(e, options) || !Modernizr.touch) { // if we're here without touch it means showtouches is true
+        var scale = Math.max(options.scale, 1 - (Math.tan(Math.abs(e.gesture.deltaX) / $(window).width())));
         hammered.css({
-          x: (e.gesture.deltaX + (e.gesture.direction == 'left' ? -options.edge_buffer : options.edge_buffer)) * options.scale,
-          scale: Math.max(options.scale, 1 - (Math.tan(Math.abs(e.gesture.deltaX) / $(window).width()) ))
+          x: (e.gesture.deltaX + (e.gesture.direction == 'left' ? -options.edge_buffer : options.edge_buffer)) * scale,
+          scale: scale
         });
       }
 
@@ -270,16 +271,19 @@ Swipy.prototype = {
 
                 $(window).trigger('statechange');
 
-                hammered.addClass('animating').transition({ x: '-300%'}, options.speed, 'in', function() {
-                  // Reset state
-                  window.Swipy.statechanged = false;
-                  // Trigger comeback
-                  setTimeout( function() {
-                    hammered.addClass('animating').transition({ x: 0, scale: 1 }, options.speed, 'out', function() {
-                      $(this).removeClass('animating');
-                    });
-                  }, options.drag_timeout / 2); // option until history is solved?
-                });
+                hammered
+                  .addClass('animating')
+                  .transition({ scale: options.scale }, options.speed /2)
+                  .transition({ x: '-300%', scale: scale}, options.speed / 2, 'in', function() {
+                    // Reset state
+                    window.Swipy.statechanged = false;
+                    // Trigger comeback
+                    setTimeout( function() {
+                      hammered.addClass('animating').transition({ x: 0, scale: 1 }, options.speed, 'out', function() {
+                        $(this).removeClass('animating');
+                      });
+                    }, options.drag_timeout / 2); // option until history is solved?
+                  });
                 break;
               case 'right': // Back
                 if (options.debug)
@@ -292,8 +296,10 @@ Swipy.prototype = {
 
                 $(window).trigger('statechange');
 
-                hammered.addClass('animating').transition({ x: '300%' }, options.speed, 'in', function() {
-                  // hammered.transition({ x: 0, scale: 1 }, options.speed * 5, 'out', function() {
+                hammered
+                  .addClass('animating')
+                  .transition({ scale: options.scale }, options.speed /2)
+                  .transition({ x: '200%', scale: scale}, options.speed / 2, 'in', function() {
                     // Reset state
                     window.Swipy.statechanged = false;
                     // Trigger comeback
@@ -551,12 +557,12 @@ Swipy.prototype = {
         links.on('click', function(e) {
           var href = $(this).attr('href');
           if (typeof(href) !== 'undefined') {
-            if(href.indexOf('http') === -1 && href.indexOf(document.location.host) === -1 && e.defaultPrevented !== true) {
+            if ((href.indexOf('http') === -1 || href.indexOf(document.location.host) >= 0) && href.indexOf('#') === -1 && e.defaultPrevented !== true) {
               $(options.page).transition({
                 scale: options.scale
-              }, options.speed).transition({
+              }, options.speed / 2).transition({
                 x: '-300%',
-              }, options.speed);
+              }, options.speed / 2);
             }
           }
         });
