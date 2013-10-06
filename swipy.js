@@ -16,6 +16,7 @@ var Swipy = function (options) {
       appcache: '/appcache.manifest'
     },
     animate: true, // page animations on internal clicks
+    animate_onload: true, // page animations on load
     speed: 200, // speed of animations
     scale: 0.85, // scale of page during dragging
     drag_timeout: 3000, // in ms, cancels page switch if drag is more than that
@@ -273,8 +274,8 @@ Swipy.prototype = {
 
                 hammered
                   .addClass('animating')
-                  .transition({ scale: options.scale }, options.speed /2)
-                  .transition({ x: '-300%', scale: scale}, options.speed / 2, 'in', function() {
+                  .transition({ scale: options.scale }, options.speed / 1.5)
+                  .transition({ x: '-300%', scale: scale}, options.speed / 1.5, 'in', function() {
                     // Reset state
                     window.Swipy.statechanged = false;
                     // Trigger comeback
@@ -298,8 +299,8 @@ Swipy.prototype = {
 
                 hammered
                   .addClass('animating')
-                  .transition({ scale: options.scale }, options.speed /2)
-                  .transition({ x: '200%', scale: scale}, options.speed / 2, 'in', function() {
+                  .transition({ scale: options.scale }, options.speed / 1.5)
+                  .transition({ x: '200%', scale: scale}, options.speed / 1.5, 'in', function() {
                     // Reset state
                     window.Swipy.statechanged = false;
                     // Trigger comeback
@@ -565,6 +566,18 @@ Swipy.prototype = {
               }, options.speed / 2);
             }
           }
+        });
+      }
+
+      // Page animations on load
+      if (options.animate_onload) {
+        $(options.page).css({ x: '200%', scale: options.scale });
+        $(window).on('load', function(e) {
+          $(options.page).transition({
+            x: 0
+          }, options.speed / 1.5).transition({
+            scale: 1,
+          }, options.speed / 1.5);
         });
       }
     }
