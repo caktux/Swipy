@@ -3,7 +3,7 @@ Swipy.js
 
 Forward / back swiping, smooth CSS3 transitions and even iOS 7 style parallax for your iOS web app and responsive website.
 
-<img align="right" src="http://raw.github.com/caktux/swipy/master/lib/swipy.png" />
+<img align="right" src="/lib/swipy.png" />
 
 **Demo:** Add caktux.ca to your Home screen.
 
