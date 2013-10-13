@@ -561,9 +561,9 @@ Swipy.prototype = {
             if ((href.indexOf('http') === -1 || href.indexOf(document.location.host) >= 0) && href.indexOf('#') === -1 && e.defaultPrevented !== true) {
               $(options.page).transition({
                 scale: options.scale
-              }, options.speed / 2).transition({
+              }, options.speed, 'inout').transition({
                 x: '-300%',
-              }, options.speed / 2);
+              }, options.speed, 'in');
             }
           }
         });
@@ -571,13 +571,15 @@ Swipy.prototype = {
 
       // Page animations on load
       if (options.animate_onload) {
-        $(options.page).css({ x: '200%', scale: options.scale });
+        $(document).on('ready', function(e) {
+          $(options.page).css({ x: '100%', scale: options.scale });
+        });
         $(window).on('load', function(e) {
           $(options.page).transition({
             x: 0
-          }, options.speed / 1.5).transition({
+          }, options.speed, 'out').transition({
             scale: 1,
-          }, options.speed / 1.5);
+          }, options.speed, 'in');
         });
       }
     }
@@ -612,7 +614,7 @@ Swipy.prototype = {
       // iOS 7 parallax on iPhone 5+ (experimental)
       if (options.parallax && window.DeviceOrientationEvent && screen.availHeight >= 548) {
         window.Swipy.parallax_lastTimestamp = 0;
-        window.Swipy.parallax_lastValues = [self.parallax_motionmin / 2, self.parallax_motionmin / 2];
+        window.Swipy.parallax_lastValues = [-1, -(self.options.parallax_offset * 0.4)]; // gives initial "normal" holding of [-24, -45] for a 50px offset
         self.setBackground(window.Swipy.parallax_lastValues[0], window.Swipy.parallax_lastValues[1]);
         window.addEventListener("devicemotion", self.orientationChanged, false);
       }
