@@ -570,7 +570,7 @@ Swipy.prototype = {
       }
 
       // Page animations on load
-      if (options.animate_onload) {
+      if (options.animate_onload && screen.availHeight >= 548) {
         $(document).on('ready', function(e) {
           $(options.page).css({ x: '100%', scale: options.scale });
         });
