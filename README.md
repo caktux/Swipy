@@ -124,6 +124,7 @@ Swipy includes a navigation bar that uses FontAwesome icons, make sure you add t
 2. Add this to your `THEME_preprocess_page`
 
   ```php
+    module_load_include('inc', 'libraries', 'libraries');
     $path = libraries_get_path('swipy');
 
     $swipy = array(
